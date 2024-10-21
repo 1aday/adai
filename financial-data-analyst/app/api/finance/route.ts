@@ -21,7 +21,7 @@ const isValidBase64 = (str: string) => {
 
 // Add Type Definitions
 interface ChartToolResponse extends ChartData {
-  // Any additional properties specific to the tool response
+  analysis: string;
 }
 
 interface ToolSchema {
@@ -94,8 +94,12 @@ const tools: ToolSchema[] = [
             required: ["label"],
           },
         },
+        analysis: {
+          type: "string" as const,
+          description: "A 1-2 paragraph analysis of the chart data",
+        },
       },
-      required: ["chartType", "config", "data", "chartConfig"],
+      required: ["chartType", "config", "data", "chartConfig", "analysis"],
     },
   },
 ];
@@ -319,6 +323,7 @@ Always:
 - Include relevant trends and insights
 - Structure data exactly as needed for the chosen chart type
 - Choose the most appropriate visualization for the data
+- Provide a concise 1-2 paragraph analysis of the chart data, highlighting key insights and trends
 
 Never:
 - Use placeholder or static data
@@ -340,10 +345,10 @@ Focus on clear financial insights and let the visualization enhance understandin
           : 0,
       toolOutput: response.content.find((c) => c.type === "tool_use")
         ? JSON.stringify(
-            response.content.find((c) => c.type === "tool_use"),
-            null,
-            2,
-          )
+          response.content.find((c) => c.type === "tool_use"),
+          null,
+          2,
+        )
         : "No tool used",
     });
 
@@ -358,7 +363,8 @@ Focus on clear financial insights and let the visualization enhance understandin
       if (
         !chartData.chartType ||
         !chartData.data ||
-        !Array.isArray(chartData.data)
+        !Array.isArray(chartData.data) ||
+        !chartData.analysis
       ) {
         throw new Error("Invalid chart data structure");
       }
@@ -398,6 +404,7 @@ Focus on clear financial insights and let the visualization enhance understandin
       return {
         ...chartData,
         chartConfig: processedChartConfig,
+        analysis: chartData.analysis,
       };
     };
 

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { TrendingUp, TrendingDown, LightbulbIcon } from "lucide-react";
 import {
   Area,
   AreaChart,
@@ -29,6 +29,21 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartData } from "@/types/chart";
+
+// Add this new component for the analysis section
+function AnalysisSection({ analysis }: { analysis: string }) {
+  return (
+    <div className="mt-4 bg-muted/50 rounded-lg p-4">
+      <div className="flex items-start space-x-2">
+        <LightbulbIcon className="w-6 h-6 text-yellow-500 mt-1 flex-shrink-0" />
+        <div>
+          <h4 className="font-semibold mb-2">Analysis</h4>
+          <p className="text-sm text-muted-foreground">{analysis}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function BarChartComponent({ data }: { data: ChartData }) {
   const dataKey = Object.keys(data.chartConfig)[0];
@@ -83,6 +98,7 @@ function BarChartComponent({ data }: { data: ChartData }) {
             {data.config.footer}
           </div>
         )}
+        {data.analysis && <AnalysisSection analysis={data.analysis} />}
       </CardFooter>
     </Card>
   );
@@ -142,6 +158,7 @@ function MultiBarChartComponent({ data }: { data: ChartData }) {
             {data.config.footer}
           </div>
         )}
+        {data.analysis && <AnalysisSection analysis={data.analysis} />}
       </CardFooter>
     </Card>
   );
@@ -210,6 +227,7 @@ function LineChartComponent({ data }: { data: ChartData }) {
             {data.config.footer}
           </div>
         )}
+        {data.analysis && <AnalysisSection analysis={data.analysis} />}
       </CardFooter>
     </Card>
   );
@@ -302,6 +320,7 @@ function PieChartComponent({ data }: { data: ChartData }) {
             {data.config.footer}
           </div>
         )}
+        {data.analysis && <AnalysisSection analysis={data.analysis} />}
       </CardFooter>
     </Card>
   );
@@ -381,6 +400,7 @@ function AreaChartComponent({
                 {data.config.footer}
               </div>
             )}
+            {data.analysis && <AnalysisSection analysis={data.analysis} />}
           </div>
         </div>
       </CardFooter>
